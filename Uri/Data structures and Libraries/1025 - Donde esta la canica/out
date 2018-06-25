@@ -1,0 +1,12 @@
+CASE# 1:
+3 found at 3
+2 found at 1
+4 found at 5
+8 not found
+10 found at 8
+CASE# 2:
+1 found at 1
+11 not found
+CASE# 3:
+4 found at 3
+3 found at 1
