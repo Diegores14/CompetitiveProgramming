@@ -42,7 +42,7 @@ class segmenTree{
     public:
     segmenTree(const vi &_A){
         A = _A; n = (int)A.size();
-        st.assign(14*n, 0);
+        st.assign(4*n, 0);
         build(1, 0, n-1);
     }
     
