@@ -3,9 +3,9 @@ using namespace std;
 typedef pair<string, string> is;
 map<string, int> m;
 struct node{
-	string first;
+	string first, word;
 	int second;
-	node(string a, int b){ first = a; second = b;}
+	node(string a, string c, int b){ first = a; word = c; second = b;}
 };
 
 bool operator <(node a, node b){
@@ -13,18 +13,18 @@ bool operator <(node a, node b){
 }
 
 int dijkstra(vector<list<is>> & v, string a, string b){
- 	vector<bool> used(v.size());
+ 	set<is> used;
 	priority_queue<node> q;
-	q.push(node(a, 0));
+	q.push(node(a, "\n", 0));
 	while(!q.empty() && q.top().first != b){
-	 	string u = q.top().first;
+	 	string u = q.top().first, w = q.top().word;
 	 	int p = q.top().second;
 	 	q.pop();
-	 	if(!used[m[u]]){
-	 	 	used[m[u]]=true;
+	 	if(used.count(is(u, w))==0){
+	 	 	used.insert(is(u, w));
 	 	 	for(is to: v[m[u]]){
-	 	 	 	if(!used[m[to.first]] && u[0] != to.first[0])
-	 	 	 		q.push(node(to.first, p+to.second.size()));
+	 	 	 	if(used.count(is(to.first, w))==0 && w[0] != to.second[0])
+	 	 	 		q.push(node(to.first, to.second, p+to.second.size()));
 	 	 	}
 	 	}
 	}
