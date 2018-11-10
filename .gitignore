@@ -1,0 +1,8 @@
+# sample i/o
+*.out
+*.in
+*.tmp
+
+# binaries
+*.exe
+*.class
