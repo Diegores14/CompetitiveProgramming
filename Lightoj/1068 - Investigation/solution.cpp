@@ -1,32 +1,37 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+int dp[10][2][91][91];
 
-int sumadigit(string n){
-	int ans=0;
-	for(char to: n)ans += to-'0';
-	return ans;
-}
-
-
-int backtracking(string a, string b, int c){
-	if(a==b)return ((stoi(a)%c==0 && sumadigit(a)%c==0)? 1 : 0);
-	string aux=a;
-	aux[aux.size()-1]++;
-	for(int i=aux.size()-1; aux[i]=='9'+1 && i>=0; i--){
-	 	if(i==0){aux[0]='1'; aux.push_back('0');}
-	 	else{aux[i]='0'; aux[i-1]++;}
-	}
- 	return backtracking(aux, b, c) + ((stoi(a)%c==0 && sumadigit(a)%c==0)? 1 : 0);
+int f(int idx, bool top, int residuo, int acc, const string &s, const int &k){
+	if(idx==(int)s.size()) return ((residuo==0 && (acc%k)==0)? 1 : 0);
+	if(dp[idx][(int)top][residuo][acc]!=-1)return dp[idx][(int)top][residuo][acc];
+	int cont = 0;
+	int mmax = (top? s[idx]-'0' : 9);
+	for(int i=0; i<=mmax; i++)
+		cont += f(idx+1, top && mmax==i, (residuo*10+i)%k, acc+i, s, k);
+	return dp[idx][(int)top][residuo][acc] = cont;
 }
 
 int main(){
 	ios_base::sync_with_stdio(false); cin.tie(NULL);
-	int n, a, b, c;
+	string b;
+	int a, k, n;
 	cin >> n;
-	while(n--){        
-		cin >> a >> b >> c;
-		cout << backtracking(to_string(a), to_string(b), c) << '\n';
-	}                    
- 	return 0;
+	for(int i=1; i<=n; i++){
+		cin >> a >> b >> k;
+		if(k>90) cout << "Case " << i << ": 0" << '\n';
+		else{
+			stringstream aux;
+			memset(dp, -1, sizeof dp);
+			int ans = f(0,true, 0, 0, b, k);
+	 		aux << (a-1);
+			string s;
+			aux >> s;
+			memset(dp, -1, sizeof dp);
+			ans -= f(0,true, 0, 0, s, k);
+			cout << "Case " << i << ": " << ans << '\n';
+		}
+	}
+	return 0;
 }
