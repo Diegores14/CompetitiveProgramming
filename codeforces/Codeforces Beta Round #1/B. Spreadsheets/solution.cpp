@@ -1,49 +1,59 @@
 #include <bits/stdc++.h>
 using namespace std;
+int k;
 
-bool tipo(string s){
-	if(s[0]!='R' || ('A'<=s[1] && s[1]<='Z'))return true;
-	for(int i=2; i<(int)s.size(); i++)if(s[i]=='C')return false;
-	return true;
+long long string_to_long(string s){
+	long long ans = 0;
+	for(; k<s.size() && '0' <= s[k] && s[k] <= '9'; k++){
+	 	ans = ans*10 + (s[k] - '0');
+	}
+	return ans;
 }
 
 int main(){
 	ios_base::sync_with_stdio(false); cin.tie(NULL);
-	int n;
+	int t;
+	cin >> t;
 	string s;
-	cin >> n;
-	while(n--){
+	while(t--){
 	 	cin >> s;
-		if(tipo(s)){
-		 	cout << 'R';
-			int aux=0;
-			int i;
-			for(i=0; 'A'<=s[i] && s[i]<='Z'; i++)aux = aux*26 + s[i]-'A'+1;
-			for(; i <(int)s.size(); i++)cout << s[i];
-			cout << 'C' << aux << '\n';
-			
-		}else{
-			bool col=false;
-			int x=0;
-			for(int i=1; i<(int)s.size(); i++){
-			 	if(col)x =  x*10 + s[i]-'0';
-				if(s[i]=='C') col = true;
+	 	bool flag = true;
+	 	if('R' == s[0] && '0' <= s[1]  && s[1] <= '9')
+	 	for(int i=1; i<s.size(); i++){
+	 	 	if(s[i] == 'C')
+	 	 		flag = false;
+	 	}
+	 	if(flag){
+			 long long ans = 0;
+       			cout << "R";
+			for(int i=0; i<s.size(); i++){
+				if('A' <= s[i] && s[i] <= 'Z')
+			 		ans = ans*26 + (s[i] - 'A' + 1);
+			 	else
+			 		cout << s[i];	
 			}
-			string aux;
-			while(x){
-				if(x%26){
-					aux.push_back(x%26+'A'-1);
-					x/=26;
-				}
+			cout << "C" << ans << '\n';
+	 	}else{
+	 		k=1;
+	 	 	long long aux = string_to_long(s);
+	 	 	k++;
+	 	 	long long aux1 = string_to_long(s);
+	 	 	string s1;
+	 	 	while(aux1){
+	 	 		int res = aux1%26;
+	 	 		if(res)
+					s1.push_back(res + 'A' - 1);
 				else{
-					aux.push_back('Z');
-					x=x/26-1;
+					s1.push_back('Z');
+					aux1--;
 				}
+				aux1 -= res;
+				aux1 /= 26;
 			}
-			for(int i=(int)aux.size()-1; i>=0; i--) cout << aux[i];
-			for(int i=1; s[i]!='C'; i++) cout << s[i];
-			cout << '\n';
-		}
+			for(int i=s1.size()-1; i>=0; i--)
+				cout << s1[i];
+			cout << aux << '\n';
+	 	}
 	}
 	return 0;
 }
