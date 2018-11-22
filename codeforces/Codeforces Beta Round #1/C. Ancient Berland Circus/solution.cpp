@@ -8,6 +8,7 @@ struct point{
 } a[3];
 
 long double PI = 3.14159265359;
+long double  eps = 1e-3;
 
 bool check(int n,const long double & rx, const long double & ry){
 	long double theta = 2*PI/n;
@@ -15,9 +16,10 @@ bool check(int n,const long double & rx, const long double & ry){
 	long double x = a[0].x;
 	long double y = a[0].y;
 	for(int i=1; i<n; i++){
-		x = (x - rx) * cos(theta) - (y - ry) * sin(theta) + rx;
-		y = (y - ry) * cos(theta) + (x - rx) * sin(theta) + ry;
-	 	if((abs(x - a[1].x) <= 1e-6 && abs(y - a[1].y) <= 1e-6) || (abs(x - a[2].x) <= 1e-6 && abs(y - a[2].y) <= 1e-6))
+		long double _x = x;
+		x = (_x - rx) * cos(theta) - (y - ry) * sin(theta) + rx;
+		y = (y - ry) * cos(theta) + (_x - rx) * sin(theta) + ry;
+	 	if((abs(x - a[1].x) <= eps && abs(y - a[1].y) <= eps) || (abs(x - a[2].x) <= eps && abs(y - a[2].y) <= eps))
 	 		ans++;
 	}
 	return ans == 2;
@@ -38,7 +40,6 @@ int main(){
 	for(int i = 3; i<=100; i++){
 		if(check(i, rx, ry)){
 			long double theta = PI/i;
-			cout << i << '\n';
 			ans = i * rr * sin(theta) * rr * cos(theta);
 			break;
 		}
