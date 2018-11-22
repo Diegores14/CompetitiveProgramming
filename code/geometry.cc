@@ -21,8 +21,9 @@ void centerThreePoints(const point & a, const point & b, const point & c, point 
 	r = sqrt((a.x - rx) * (a.x - rx) + (a.y - ry) * (a.y - ry));
 }
 
-void rotation(point & p, const point & center, long double theta){
-	long double _x = p.x;
-	p.x = (_x - center.x) * cos(theta) - (p.y - center.y) * sin(theta) + center.x;
-	p.y = (p.y - center.y) * cos(theta) + (_x - center.x) * sin(theta) + center.y;
+point rotation(const point & p, const point & center, long double theta){
+	point ans;
+	ans.x = (p.x - center.x) * cos(theta) - (p.y - center.y) * sin(theta) + center.x;
+	ans.y = (p.y - center.y) * cos(theta) + (p.x - center.x) * sin(theta) + center.y;
+	return ans;
 }
