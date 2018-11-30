@@ -15,9 +15,11 @@ int main(){
         if(k)
             cout << '\n';
         k++;
+        bool flag = false;
         cin >> n;
         string s;
         vector< vector<int> > v(n, vector<int>(n, 0));
+        vector<string> touch(n);
         for(int i=0; i<n; i++){
             cin >> s;
             for(int j=0; j<n; j++){
@@ -27,6 +29,7 @@ int main(){
             }
         }
         for(int i=0; i<n; i++){
+            cin >> touch[i];
             for(int j=0; j<n; j++){
                 if(v[i][j] == -1){
                     Fill(j, i+1, n, v);
@@ -36,14 +39,17 @@ int main(){
                     Fill(j+1, i+1, n, v);
                     Fill(j+1, i-1, n, v);
                     Fill(j-1, i+1, n, v);
-                    Fill(j-1, i-1, n, v);            
+                    Fill(j-1, i-1, n, v);
+                    if(touch[i][j] == 'x')
+                        flag = true;
                 }
             }
         }
-        for(int i=0; i<n; i++){
-            cin >> s;
+        for(int i=0; i<n; i++){            
             for(int j=0; j<n; j++){
-                if(s[j] == 'x'){
+                if(flag && v[i][j] == -1)
+                    cout << '*';
+                else if(touch[i][j] == 'x'){
                     if(v[i][j] == -1)
                         cout << '*';
                     else
