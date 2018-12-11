@@ -54,6 +54,7 @@ int main(){
     pos = s.size();
     for(int i = s.size()-1; i >= 0; i--){
         if(s[i] == 'a'){
+            
             if(preffixb[pos]-preffixb[i+1] > 0){
                 pos = i+1;
             }
