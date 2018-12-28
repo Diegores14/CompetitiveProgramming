@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 const long long M = 998244353;
+vector<int> v;
 
 long long potentation(long long a, long long b){
     long long ans = 1, temp = a;
@@ -14,28 +15,34 @@ long long potentation(long long a, long long b){
     return ans;
 }
 
-long long BFS(vector<vector<int>> &G){
-    vector<int> v(G.size(), -1);
+long long BFS(vector<vector<int>> &G, int idx){
     int color[2];
     color[0] = color[1] = 0;
     queue<int> q;
-    q.push(0);
-    v[0] = 1;
-    while(!q.empty()){
-        int temp = q.front();
-        color[v[temp]-1]++;
-        q.pop();
-        for(int i : G[temp]){
-            if(v[i] == -1){
-                q.push(i);
-                v[i] = (v[temp] == 1)? 2 : 1;
-            }else{
-                if(v[temp] == v[i])
-                    return 0;
+    if(v[idx] == -1){
+        q.push(idx);
+        v[idx] = 1;
+        while(!q.empty()){
+            int temp = q.front();
+            color[v[temp]-1]++;
+            q.pop();
+            for(int i : G[temp]){
+                if(v[i] == -1){
+                    q.push(i);
+                    v[i] = (v[temp] == 1)? 2 : 1;
+                }else{
+                    if(v[temp] == v[i])
+                        return 0;
+                }
             }
         }
+        if(color[1] == 0){
+            return 3;
+        }
+        return (potentation(2, color[0]) + potentation(2, color[1]))%M;
+    }else{
+        return 1;
     }
-    return (potentation(2, color[0]) + potentation(2, color[1]))%M;
 }
 
 int main(){
@@ -43,6 +50,7 @@ int main(){
     int t, n, m, a, b;
     cin >> t;
     while(t--){
+        long long ans = 1;
         cin >> n >> m;
         vector<vector<int>> G(n);
         for(int i=0; i<m; i++){
@@ -51,7 +59,10 @@ int main(){
             G[a].emplace_back(b);
             G[b].emplace_back(a);
         }
-        cout << BFS(G) << '\n';
+        v.assign(G.size(), -1);
+        for(int i=0; i<G.size(); i++)
+            ans = (ans * BFS(G, i))%M;
+        cout << ans << '\n';
     }
     return 0;
 }
