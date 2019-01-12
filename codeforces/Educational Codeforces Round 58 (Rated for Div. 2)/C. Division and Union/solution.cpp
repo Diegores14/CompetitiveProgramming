@@ -1,56 +1,35 @@
 #include <bits/stdc++.h>
 using namespace std;
-struct node {
-    int x;
-    char type;
-    node(int _x, char T){x=_x; type = T;}
-    bool operator <(node other) const {
-        if( x == other.x){
-            if(type == 'l'){
-                return true;
-            }else {
-                return false;
-            }
-        }else
-            return x < other.x;
-    }
-};
 
 int main() {
-    ios_base::sync_with_stdio(false); cin.tie(NULL);
-    int t, n, mmin = 1e9, mmax = 0, l, r;
+    ios_base::sync_with_stdio(false);
+     cin.tie(NULL);
+    int t, n;
     cin >> t;
     while(t--) {
         cin >> n;
-        int ans[1000002];
-        vector<node> s;
-        vector<pair<int,int>> v(n);
+        vector< pair< pair<int,int>, int> >v(n);
+        vector<int> ans(n, 2);
         for(int i=0; i<n; i++) {
-            cin >> l >> r;
-            v[i].first = l;
-            v[i].second = r;
-            s.push_back(node(l, 'l'));
-            s.push_back(node(r, 'r'));
+            cin >> v[i].first.first >> v[i].first.second;
+            v[i].second = i;
         }
-        int sum = 0, temp = 1;
-        sort(s.begin(), s.end());
-        for(node &i: s) {
-            sum += ((i.type=='l')? 1 : -1);
-            ans[i.x] = temp;
-            if(sum == 0){
-                temp++;
+        sort(v.begin(), v.end());
+        int R = v[0].first.second;
+        int i=0;
+        for(; i<n; i++) {
+            if(v[i].first.first <= R) {
+                ans[v[i].second] = 1;
+                R = max(R, v[i].first.second);
+            } else {
+                break;
             }
         }
-        if(temp > 2){
+        if(i < n) {
             for(int i=0; i<n; i++) {
-                if(ans[v[i].first] == 1) {
-                    cout << "1";
-                }else{
-                    cout << "2";
-                }
-                cout << ((i == n-1)? '\n' : ' '); 
+                cout << ans[i] << ((i==n-1)? '\n': ' ');
             }
-        }else {
+        } else {
             cout << "-1\n";
         }
     }
