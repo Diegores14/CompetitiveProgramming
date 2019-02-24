@@ -4,3 +4,4 @@ if you want create the notebook.pdf I will recommend [notebook-generator](https:
 EN Español 
 Aquí encontraras diferentes algoritmos y temas para resolver problemas de programación competitiva, si usted quiere crear un notebook.pdf yo recomiendo [notebook-generator](https://www.npmjs.com/package/notebook-generator)
 El objetivo de esta carpeta es enseñar a como superar las barreras por las cuales he pasado.
+Tengo que agregar la explicación de combinatorias y como empezar en codeforces
