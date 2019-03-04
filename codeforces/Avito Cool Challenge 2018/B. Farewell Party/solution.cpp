@@ -3,28 +3,34 @@ using namespace std;
 
 int main(){
     ios_base::sync_with_stdio(false); cin.tie(NULL);
-    long long  n;
-    map<long long, int> m;
+    int n, temp;
     cin >> n;
-    vector<long long> temp(n);
-    for(int i=0; i<n; i++){
-        cin >> temp[i];
-        m[temp[i]]++;
+    vector< queue<int> > v(n);
+    for(int i=0; i<n; i++) {
+        cin >> temp;
+        v[temp].push(i);
     }
-    for(auto i: m){
-        if(n - i.second != i.first){
-            cout << "Impossible\n";
-            return 0;
+    int l = 1;
+    vector<int> ans(n);
+    for(int i=0; i<n; i++) {
+        while(!v[i].empty()) {
+            temp = n-i;
+            while(!v[i].empty() && temp != 0) {
+                int pos = v[i].front();
+                ans[pos] = l;
+                v[i].pop();
+                temp--;
+            }
+            if(temp) {
+                cout << "Impossible\n";
+                return 0;
+            }
+            l++;
         }
     }
-    int k=0;
-    map<long long, int> m1;
     cout << "Possible\n";
-    for(int i = 0; i<n; i++){
-        if(m1.count(temp[i]) == 0){
-            m1[temp[i]] = m1.size()+1;
-        }
-        cout << m1[temp[i]] << ((i==n-1)? '\n': ' '); 
+    for(int &i: ans) {
+        cout << i << ' ';
     }
     return 0;
 }
