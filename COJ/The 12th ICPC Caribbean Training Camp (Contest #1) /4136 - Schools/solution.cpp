@@ -71,7 +71,7 @@ int main() {
     if(flujo == n) {
         cout << cost << '\n';
     } else {
-        cout << "NIE\n";
+        cout << "NO\n";
     }
     return 0;
 }
