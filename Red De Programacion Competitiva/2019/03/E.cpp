@@ -7,7 +7,7 @@ int n, m, c;
 
 bool used[31][31];
 bool used1[1000];
-long long mmin[1000];
+long long mmin[10000];
 int dx[4] = {1, 0, -1, 0};
 int dy[4] = {0, 1, 0, -1};
 int dx1[8] = {1, 0, -1, 0, -1, -1, 1, 1};
@@ -62,9 +62,13 @@ struct MCMF {
 };
 */
 
+bool checkRange(int a, int b, int c) {
+    return a <= b && b < c;
+}
+
 void DFS(int x, int y, bool &flag) {
     used[x][y] = true;
-    if(x <= 0 || m <= x-1 || y <= 0 || n <= y-1) {
+    if(!checkRange(1, x, m-1) || !checkRange(1, y, n-1)) {
         flag = true;
         return;
     }
@@ -75,33 +79,31 @@ void DFS(int x, int y, bool &flag) {
     }
 }
 
-bool checkRange(int a, int b, int c) {
-    return a <= b && b < c;
-}
-
 pair<int, int> createPair(int x, int y) {
-    return make_pair(x*m+y, values[v[x][y]-'a']);
+    return make_pair(x*n+y, values[v[x][y]-'a']);
 }
 
-long long Dijkstra() {
+long long Dijkstra(int ini, int fin) {
+    memset(used1, 0, sizeof used1);
+    for(int i=0; i<10000; i++) mmin[i] = 1e18;
     set< pair<long long, int> > q;
-    q.insert(make_pair(0, 997));
-    mmin[0] = 0;
-    while(!q.empty() && q.begin()->second != 998) {
+    q.insert(make_pair(0, ini));
+    mmin[997] = 0;
+    while(!q.empty() && q.begin()->second != fin) {
         long long dist = q.begin()->first;
         int idx = q.begin()->second;
         used1[idx] = true;
         q.erase(q.begin());
         for(auto &i: G[idx]) {
             if(!used1[i.first] && dist + i.second < mmin[i.first]) {
-                auto temp = make_pair(mmin[i.first], i.first);
-                if(q.count(temp)) {
-                    q.erase(q.find(temp));
-                }
+                q.erase({mmin[i.first], i.first});
                 q.insert(make_pair(dist + i.second, i.first));
                 mmin[i.first] = dist + i.second;
             }
         }
+    }
+    if(q.empty()) {
+        return 1000000000000;
     }
     return q.begin()->first;
 }
@@ -141,28 +143,30 @@ int main() {
                         int tempx = i+dx1[k], tempy  = j+dy1[k];
                         if(checkRange(0, tempx, m) && checkRange(0, tempy, n) &&
                             v[tempx][tempy] != '.' && v[tempx][tempy] != 'B') {
-                                G[i*m+j].push_back(createPair(tempx, tempy));
+                                G[i*n+j].push_back(createPair(tempx, tempy));
                         }
                     }
             }
         }
         for(int i=0; i < y; i++) {
-            G[997].push_back(createPair(x, i));
+            //G[997].push_back(createPair(x, i));
             if(v[x][i] != '.' && v[x][i] != 'B')
                 for(int j: {-1, 0, 1}) {
                     if(checkRange(0, x-1, m) && checkRange(0, j+i, y+1) &&
                         v[x-1][j+i] != '.' && v[x-1][j+i] != 'B') {
-                        G[x*m+i].push_back(createPair(x-1, i+j));
+                        G[x*n+i].push_back(createPair(x-1, i+j));
                     }
                     if(checkRange(0, x+1, m) && checkRange(0, j+i, y+1) &&
                         v[x+1][j+i] != '.' && v[x+1][j+i] != 'B') {
-                        G[(x+1)*m+i+j].push_back(make_pair(998, 0));
+                        G[(x+1)*n+i+j].push_back(make_pair(950+i, 0));
                     }
                 }
         }
-        memset(used1, 0, sizeof used1);
-        for(int i=0; i<1000; i++) mmin[i] = 1e18;
-        cout << Dijkstra() << '\n';
+        long long ans = 1e18;
+        for(int i=0; i<y; i++) {
+            ans = min(ans, Dijkstra(x*n+i, 950+i) + values[v[x][i]-'a']);
+        }
+        cout << ans << '\n';
     } else {
         cout << -1 << '\n';
     }
