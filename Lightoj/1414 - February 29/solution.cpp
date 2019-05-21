@@ -32,7 +32,7 @@ int main() {
     char c;
     int d1, d2, y1, y2;
     cin >> t;
-    for(int k=1; k<=n; k++) {
+    for(int k = 1; k <= t; k++) {
         cout << "Case " << k << ": ";
         cin >> s1 >> d1 >> c >> y1 >> s2 >> d2 >> c >> y2;
         int sum2 = leapYear(y2-1);
