@@ -1,8 +1,20 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+int leapYear(int y) {
+    int ans = 0;
+    ans += y/4;
+    ans -= y/100;
+    ans += y/400;
+    return ans;
+}
+
+int isLeap(int y) {
+    return (y%4 == 0 && y%100) || y%400 == 0;
+}
+
 int main() {
-    int n;
+    int t;
     map<string, int> m;
     m["January"] = 0;
     m["February"] = 1;
@@ -16,25 +28,22 @@ int main() {
     m["October"] = 9;
     m["November"] = 10;
     m["December"] = 11;
-    string s, s1;
+    string s1, s2;
     char c;
-    int d, d1, y, y1;
-    cin >> n;
+    int d1, d2, y1, y2;
+    cin >> t;
     for(int k=1; k<=n; k++) {
         cout << "Case " << k << ": ";
-        cin >> s >> d >> c >> y >> s1 >> d1 >> c >> y1;
-        int ans = y1/4 - y1/100 + y1/400;
-        ans -= (y-1)/4 - (y-1)/100 + (y-1)/400;
-        if((y%100 == 0 || (y%4 == 0 && y%100)) && m[s] > 1) {
-            ans--;
+        cin >> s1 >> d1 >> c >> y1 >> s2 >> d2 >> c >> y2;
+        int sum2 = leapYear(y2-1);
+        int sum1 = leapYear(y1-1);
+        if( m[s2] > 1 || (m[s2] == 1 && d2 == 29) ) {
+            sum2 += isLeap(y2);
         }
-        if((y1%100 == 0 || (y1%4 == 0 && y1%100)) && (m[s1] == 0 || (m[s1] == 1 && d1<29))) {
-            ans--;
+        if( 1 < m[s1] ) {
+            sum1 += isLeap(y1);
         }
-        if(y1 == y && m[s] == m[s1] && d1 == d && d == 29 && m[s] == 1) {
-            ans = 1;
-        }
-        cout << ans << '\n';
+        cout << sum2 - sum1 << '\n';
     }
     return 0;
 }
