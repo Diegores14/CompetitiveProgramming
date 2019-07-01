@@ -1,0 +1,2 @@
+In this problem you can use LCA and segmentTree with euler tour. for more details, you can view this page https://cp-algorithms.com/graph/tree_painting.html.
+also it's can use https://cp-algorithms.com/graph/hld.html.
