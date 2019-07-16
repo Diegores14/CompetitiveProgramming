@@ -6,7 +6,7 @@ int main(){
 	cin >> n;
 	if(n&1)cout << "NO\n";
 	else{
-	        cout << ((n==2)? "No\n" : "YES\n");
+	        cout << ((n==2)? "NO\n" : "YES\n");
 	}
 	return 0;
 }
