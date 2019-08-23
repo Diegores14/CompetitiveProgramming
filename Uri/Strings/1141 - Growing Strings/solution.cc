@@ -5,22 +5,28 @@ int len = 1;
 bool terminator[tam];
 int go[tam][26];
 int fail[tam];
-vector< list<int> > go2, out;
+list<int> go2[tam], out[tam];
 int dp[tam];
 
 struct ahoCorasick {
     ahoCorasick() {
-        memset( go, -1, sizeof go );        
+        clear(0);
         memset( dp, -1, sizeof dp );
         memset( terminator, 0, sizeof terminator );
-        go2.assign( tam, list<int>() );
-        out.assign( tam, list<int>() );
+        for( int i = 0; i < tam; i++) {
+            go2[i].clear();
+            out[i].clear();
+        }
         len = 1;
+    }
+    void clear( int i ){  
+        memset( go[i], -1, sizeof go[i] );
     }
     void add_string( const string &s ) {
         int state = 0;
         for( int i = 0; i < s.size(); i++) {
             if( go[state][s[i]-'a'] == -1 ) {
+                clear(len);
                 go[state][s[i]-'a'] = len++;
             }
             state = go[state][s[i]-'a'];
