@@ -16,7 +16,7 @@ int solve() {
             int dp;
             if( ind[1][end] <= ini ) {
                 dp = 1;
-            } else {
+            } else { 
                 dp = 0;
             }
             ans = max( ans, dp*len );
