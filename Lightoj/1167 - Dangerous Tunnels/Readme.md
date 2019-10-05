@@ -1,0 +1,1 @@
+This problem is easy, the firts is think in the problem "how is maximum amount paths that no repeat nodes", and to find the minimun dangerous is only do binary search.
