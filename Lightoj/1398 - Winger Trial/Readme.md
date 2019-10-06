@@ -1,0 +1,1 @@
+for this problem you can create a network between the top and lower limits, you create a type of barriers with network's edges.
