@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+using namespace std;
+long long dp[6000];
+long long mod = 1e9+7;
+
+long long exp( long long b, long long e, long long mod ) {
+    long long ans = 1;
+    while( e ) {
+        if( e&1 ) {
+            ans = (ans*b)%mod;
+        }
+        b = (b*b)%mod;
+        e >>= 1;
+    }
+    return ans;
+}
+
+struct rollingHash {
+    int p, mod;
+    unordered_set< int > dictionary;
+    vector< int > h, po, invPo;
+    rollingHash( int p, int mod, const string &s ): p(p), mod(mod), h(s.size()+1), po(s.size()+1), invPo(s.size()+1) {
+        po[0] = 1;
+        invPo[0] = 1;
+        for( int i = 0; i < s.size(); i++ ) {
+            h[i+1] = ( h[i] + (1LL*po[i]*(s[i]-'a'+1))%mod )%mod;
+            po[i+1] = (1LL*po[i]*p)%mod;
+            invPo[i+1] = exp( po[i+1], mod-2, mod );
+            if( h[i+1] < 0 ) cout << "HEllo\n";
+        }
+    }
+    bool isInSet( int hash ) {
+        return dictionary.count(hash);
+    }
+    void add( const string &s ) {
+        dictionary.insert(getHash(s));
+    }
+    int getHash( const string &s ) {
+        long long ans = 0;
+        for( int i = 0; i < s.size(); i++ ) {
+            ans = ( ans + (1LL*po[i]*(s[i]-'a'+1))%mod )%mod;
+        }
+        return ans;
+    }
+};
+
+int sub( int a, int b, int mod ) {
+    if( a-b < 0 ) return a-b+mod;
+    return a-b;
+}
+
+int mul( int a, int b, int mod ) {
+    return (1LL*a*b)%mod;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false); cin.tie(NULL);
+    string s, temp, word;
+    cin >> s;
+    rollingHash h1(37, 1000000007, s);
+    rollingHash h2(41, 1000000009, s);
+    int k;
+    cin >> k;
+    set< int > len;
+    for( int i = 0; i < k; i++ ) {
+        cin >> word;
+        h1.add(word);
+        h2.add(word);
+        len.insert(word.size());
+    }
+    dp[s.size()] = 1;
+    for( int i = s.size()-1; i >= 0; i-- ) {
+        for( int j: len ) {
+            if( i+j > s.size() ) break;
+            int hash1 = mul( sub(h1.h[i+j],h1.h[i],h1.mod), h1.invPo[i], h1.mod );
+            int hash2 = mul( sub(h2.h[i+j],h2.h[i],h2.mod), h2.invPo[i], h2.mod );
+            if( h1.isInSet(hash1) && h2.isInSet(hash2) ) {
+                dp[i] = (dp[i]+dp[i+j])%mod;
+            }
+        }
+    }
+    cout << dp[0] << '\n';
+    return 0;
+}
